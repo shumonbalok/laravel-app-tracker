@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Response;
 use Shumonpal\LaravelAppTracker\Models\LicenceKey;
+use Shumonpal\LaravelAppTracker\Models\LicenceKeyUser;
 
 /**
  * Class LicenceKeyController
@@ -45,17 +46,20 @@ class LicenceKeyAPIController extends Controller
 
             $existingKey = LicenceKey::whereCode($request->code)->first();
             if ($existingKey) {
-                if ($existingKey->domain) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Licence key already in use: '. $existingKey->domain,
-                    ]);
-                }
+                // if ($existingKey->domain) {
+                //     return response()->json([
+                //         'success' => false,
+                //         'message' => 'Licence key already in use: '. $existingKey->domain,
+                //     ]);
+                // }
 
-                $existingKey->update(['domain' => $request->domain, 'status' => 2]);
+                // $existingKey->update(['domain' => $request->domain, 'status' => 2]);
+                LicenceKeyUser::updateOrCreate(
+                    ['domain' => $request->domain, 'licence_key' => $request->code], ['status' => 1]
+                );
                 return response()->json([
                     'success' => 'verified',
-                    'message' => 'Licence key updated successfully',
+                    'message' => 'Licence key verified success',
                 ]);
             }
 

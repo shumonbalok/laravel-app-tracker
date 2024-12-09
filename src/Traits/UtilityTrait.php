@@ -26,17 +26,6 @@ trait UtilityTrait
         return parse_url($domain, PHP_URL_HOST);
     }
 
-    /**
-    *
-    * Get licence key
-    * @return Response
-    */
-    public function licence(){
-        return cache()->remember(
-            'shumonpal-licence-'. $this->getDomainName(request()->url()), now()->addDays(15),
-            fn () => ShumonpalLicence::first()
-        );
-    }
     
     /**
     *
